@@ -1,0 +1,25 @@
+print("This program will choose the most cost effective option of two cheese wheels");
+
+#read values for first cheese
+diameter1 = int(input("Enter the diameter (in centimetres) of the first cheese: "));
+height1 = int(input("Enter the height (in centimetres) of the first cheese: "));
+cost1 = float(input("Enter the cost (in euro) of the first cheese: "));
+
+#read values for second cheese
+diameter2 = int(input("Enter the diameter (in centimetres) of the second cheese: "));
+height2 = int(input("Enter the height (in centimetres) of the second cheese: "));
+cost2 = float(input("Enter the cost (in euro) of the second cheese: "));
+
+#compute values
+value1 = (3.14*0.25*diameter1*diameter1*height1)/cost1;
+value2 = (3.14*0.25*diameter2*diameter2*height2)/cost2;
+
+print("Cheese no.1 has:",value1,"cm^3/€ and cheese no.2 has:",value2,"cm^3/€");
+
+#deliver conclusion
+if value1<value2:
+    print("Cheese number 2 is more cost effective.")
+elif value1>value2:
+    print("Cheese number 1 is more cost effective.")
+else:
+    print("Both have equal cost effectiveness.")
