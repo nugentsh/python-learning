@@ -1,0 +1,110 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+e = 2.71828
+#sigmoid function
+def sig(z):
+    sig_z = float(1/(1+e**(-z)))
+    return sig_z;
+
+#derivative of sigmoid
+def sig_deriv(z):
+    sig_deriv_z = float((e**(-z))/(((e**(-z))+1)**2))
+    return sig_deriv_z
+
+
+#import our training examples
+from exam_data import exam_data
+
+#random initial variables
+weights_L1 = np.random.uniform(-3,3,(5,3))
+weights_L2 = np.random.uniform(-3,3,(5))
+biases_L2 = np.random.uniform(-5,5, (5))
+
+#gradient components
+weights_L2_effect = np.zeros([3,5])
+biases_effect = np.zeros([3,5])
+weights_L1_effect = np.zeros([3,5,3])
+averaged_error = [0]*5
+
+counter = 0
+
+while counter<=12:
+    input_data = np.zeros([3, 4])
+    set_value = (counter/3)+1
+    error_val = [0] * 3
+    print("***** Data set "+ str(set_value) +" *****\n")
+
+    for k in range(0,3):
+        input_data[k] = exam_data[k+counter]
+
+
+
+        #hidden layer calculations
+        neurons_L2 = [0]*5
+        z_val = [0]*6
+        for x in range(0,5):
+            weighted_inputs = 0
+            for i in range(0,3):
+                weighted_inputs = float(weighted_inputs+(input_data[k][i]*weights_L1[x,i]))
+
+            z_val[x] = float(weighted_inputs+biases_L2[x])
+            neurons_L2[x] = sig(z_val[x])
+
+
+        #output calculation
+        weighted_inputs = 0
+        for i in range(0,5):
+            weighted_inputs = float(weighted_inputs + (neurons_L2[i] * weights_L2[i]))
+        z_val[5] = weighted_inputs
+        output = float(sig(z_val[5]))
+
+        print(input_data,' -> ', neurons_L2,' -> ', output)
+
+
+        #learning
+        #calculate cost function
+        desired_output = input_data[k][3]
+        cost = float((output-desired_output)**2)
+        error_val[k] = cost**(1/2)
+        print("error in data set = "+ str(cost**(1/2)))
+
+
+        #weights between layer 2 and 3 and biases in layer 2
+        for i in range(0,5):
+            weights_L2_effect[k][i] = float(neurons_L2[i] * sig_deriv(z_val[5]) * 2*(output-desired_output))
+            biases_effect[k][i] = float(sig_deriv(z_val[5]) * 2*(output-desired_output))
+
+        #weights between layer 1 and 2
+        for x in range(0,5):
+            for i in range(0,3):
+                weights_L1_effect[k][x][i] = float(input_data[k][i] * sig_deriv(z_val[x]) * weights_L2[x] * sig_deriv(z_val[5]) * 2*(output-desired_output))
+
+
+
+    #calculate average changes to weights and biases
+    averaged_weights_L1_effect = weights_L1_effect[0] + weights_L1_effect[1] + weights_L1_effect[2]
+    averaged_weights_L1_effect = [x/3 for x in averaged_weights_L1_effect]
+
+    averaged_weights_L2_effect = weights_L2_effect[0] + weights_L2_effect[1] + weights_L2_effect[2]
+    averaged_weights_L2_effect = [x/3 for x in averaged_weights_L2_effect]
+
+    averaged_biases_effect = biases_effect[0] + biases_effect[1] + biases_effect[2]
+    averaged_biases_effect = [x/3 for x in averaged_biases_effect]
+
+
+
+    #apply gradient vector to weights and biases
+    weights_L1 = weights_L1 - averaged_weights_L1_effect
+    weights_L2 = weights_L2 - averaged_weights_L2_effect
+    biases_L2 = biases_L2 - averaged_biases_effect
+
+    averaged_error[int(counter/3)] = (error_val[0]+error_val[1]+error_val[2])/3
+
+    counter = counter + 3
+    print("\n  \n  \n")
+
+#plot errors
+data_set = (1, 2, 3, 4, 5)
+plt.plot (data_set, averaged_error)
+plt.show()
