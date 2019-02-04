@@ -1,3 +1,6 @@
+ #backpropogation algorithm for neural network
+ #part of larger project
+ 
  desired_output = input_data[k][3]
         cost = float((output-desired_output)**2)
         error_val[k] = cost**(1/2)
