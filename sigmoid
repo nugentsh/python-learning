@@ -1,0 +1,13 @@
+#functions for use in neural networks
+
+e = 2.71828
+
+#sigmoid function
+def sig(z):
+    sig_z = float(1/(1+e**(-z)))
+    return sig_z;
+
+#derivative of sigmoid
+def sig_deriv(z):
+    sig_deriv_z = float((e**(-z))/(((e**(-z))+1)**2))
+    return sig_deriv_z
