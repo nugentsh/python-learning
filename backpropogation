@@ -1,0 +1,34 @@
+ desired_output = input_data[k][3]
+        cost = float((output-desired_output)**2)
+        error_val[k] = cost**(1/2)
+        print("error in data set = "+ str(cost**(1/2)))
+
+
+        #weights between layer 2 and 3 and biases in layer 2
+        for i in range(0,5):
+            weights_L2_effect[k][i] = float(neurons_L2[i] * sig_deriv(z_val[5]) * 2*(output-desired_output))
+            biases_effect[k][i] = float(sig_deriv(z_val[5]) * 2*(output-desired_output))
+
+        #weights between layer 1 and 2
+        for x in range(0,5):
+            for i in range(0,3):
+                weights_L1_effect[k][x][i] = float(input_data[k][i] * sig_deriv(z_val[x]) * weights_L2[x] * sig_deriv(z_val[5]) * 2*(output-desired_output))
+
+
+
+    #calculate average changes to weights and biases
+    averaged_weights_L1_effect = weights_L1_effect[0] + weights_L1_effect[1] + weights_L1_effect[2]
+    averaged_weights_L1_effect = [x/3 for x in averaged_weights_L1_effect]
+
+    averaged_weights_L2_effect = weights_L2_effect[0] + weights_L2_effect[1] + weights_L2_effect[2]
+    averaged_weights_L2_effect = [x/3 for x in averaged_weights_L2_effect]
+
+    averaged_biases_effect = biases_effect[0] + biases_effect[1] + biases_effect[2]
+    averaged_biases_effect = [x/3 for x in averaged_biases_effect]
+
+
+
+    #apply gradient vector to weights and biases
+    weights_L1 = weights_L1 - averaged_weights_L1_effect
+    weights_L2 = weights_L2 - averaged_weights_L2_effect
+    biases_L2 = biases_L2 - averaged_biases_effect
