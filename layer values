@@ -1,0 +1,21 @@
+#calculate values in hidden layer and ouput of simple neural network
+#part of larger project
+
+#hidden layer calculations
+        neurons_L2 = [0]*5
+        z_val = [0]*6
+        for x in range(0,5):
+            weighted_inputs = 0
+            for i in range(0,3):
+                weighted_inputs = float(weighted_inputs+(input_data[k][i]*weights_L1[x,i]))
+
+            z_val[x] = float(weighted_inputs+biases_L2[x])
+            neurons_L2[x] = sig(z_val[x])
+
+
+        #output calculation
+        weighted_inputs = 0
+        for i in range(0,5):
+            weighted_inputs = float(weighted_inputs + (neurons_L2[i] * weights_L2[i]))
+        z_val[5] = weighted_inputs
+        output = float(sig(z_val[5]))
