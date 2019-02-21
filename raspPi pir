@@ -1,0 +1,28 @@
+
+import RPi.GPIO as gpi
+# import time
+import pygame as pg
+
+pg.mixer.init()
+pg.mixer.music.load("") #file name here
+
+
+gpi.setwarnings(False)
+gpi.setmode(gpi.BCM)#
+
+gpi.setup(11, gpi.IN) #GPIO17 INPUTbutton
+gpi.setup(13, gpi.IN) #GPIO27 PIRsensor
+
+gpi.setup(18, gpi.OUT) #GPIO24 Speaker
+#gpi.setup(16, gpi.OUT) #GPIO23
+
+
+if gpi.input(11):
+    print('button 1 triggered')
+    if gpi.input(13):
+        pg.mixer.music.play()
+        #gpi.output(18, True)
+        print('User detected, message relayed')
+    else:
+        print('Input triggered, but user not present')
+
