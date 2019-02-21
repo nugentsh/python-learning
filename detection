@@ -1,13 +1,31 @@
+
 from imageai.Detection import ObjectDetection
 import os
 
 execution_path = os.getcwd()
 
+camera.start_preview()
+sleep(3)
+camera.capture('/home/pi/Desktop/image.jpg')
+camera.stop_preview()
+
 detector = ObjectDetection()
 detector.setModelTypeAsRetinaNet()
 detector.setModelPath( os.path.join(execution_path , "resnet50_coco_best_v2.0.1.h5"))
 detector.loadModel()
-detections = detector.detectObjectsFromImage(input_image=os.path.join(execution_path , "image.jpg"), output_image_path=os.path.join(execution_path , "imagenew.jpg"))
+detector.detection_speed("fast")
+
+detections = detector.detectObjectsFromImage(input_image='/home/pi/Desktop/image.jpg'), 
+output_image_path=os.path.join(execution_path , "imagenew.jpg"),
+minimum_percentage_probability=30))
 
 for eachObject in detections:
     print(eachObject["name"] , " : " , eachObject["percentage_probability"] )
+    
+user_detect = detector.customobjects(person=True)
+
+#detections = detector.detectCustomObjectsFromImage( custom_objects=custom, 
+#input_image=os.path.join(execution_path , "image3.jpg"), 
+#output_image_path=os.path.join(execution_path , "image3new-custom.jpg"), 
+#minimum_percentage_probability=30)
+
