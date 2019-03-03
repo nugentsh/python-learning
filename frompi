@@ -8,7 +8,7 @@ camera = PiCamera()
 
 camera.start_preview()
 sleep(4)
-camera.capture('/home/pi/Desktop/image.jpg')
+camera.capture('/home/pi/mydetect/image.jpg')
 camera.stop_preview()
 
 execution_path = os.getcwd()
